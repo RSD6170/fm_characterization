@@ -3,8 +3,7 @@ from typing import Any, Optional
 
 from flamapy.metamodels.fm_metamodel.models import FeatureModel
 
-from fm_characterization import FMProperty, FMAnalysis, FMMetadata, FMMetrics
-
+from fm_characterization import FMProperty, FMAnalysis, FMMetadata, FMMetrics, FMPropertyMeasure
 
 SPACE = ' '
 
@@ -43,6 +42,14 @@ class FMCharacterization():
             lines.append(f'{indentation}{name}: {value}{ratio}')    
         return '\n'.join(lines)
 
+    def export(self) -> str:
+        lines = []
+        lines.extend(create_export_array(self.metrics.get_metrics(), "METRICS"))
+        lines.extend(create_export_array(self.analysis.get_analysis(), "ANALYSIS"))
+        return '\n'.join(lines)
+
+
+
     def to_json(self) -> dict[Any]:
         metadata = []
         metrics = []
@@ -72,6 +79,29 @@ class FMCharacterization():
         with open(filepath, 'w') as output_file:
             json.dump(result, output_file, indent=4)
 
+def create_export_array(measures: [FMPropertyMeasure], prefix: str) -> [str]:
+    parting_symbol = " "
+    lines = []
+    for property in measures:
+        parents = get_parents(property.property)
+        name = f"{prefix}"
+        for parent in parents:
+            name = f'{name}/{parent.name}'
+        name = f'{name}/{property.property.name}'
+        name = name.replace(" ", "_")
+
+        value = str(property.value) if property.size is None else str(property.size)
+        lines.append(f'{name + "/value"}{parting_symbol}{value}')
+        if property.ratio is not None:
+            ratio = property.ratio if property.ratio is not None else ''
+            lines.append(f'{name + "/ratio"}{parting_symbol}{ratio}')
+    return lines
+
+def get_parents(property: FMProperty) -> list[FMProperty]:
+    if property.parent is None:
+        return []
+    else:
+        return get_parents(property.parent) + [property.parent]
 
 def get_parents_numbers(property: FMProperty) -> int:
     if property.parent is None:

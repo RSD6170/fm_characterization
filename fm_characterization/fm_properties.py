@@ -99,17 +99,17 @@ class FMProperties(Enum):
     MAX_ATTRIBUTES_PER_FEATURE = FMProperty('Max attributes per feature', 'The maximal number of attributes in a feature.', FEATURE_ATTRIBUTES)
     AVG_ATTRIBUTES_PER_FEATURE = FMProperty('Avg attributes per feature', 'Average number of attributes in features.', FEATURE_ATTRIBUTES)
     AVG_ATTRIBUTES_PER_FEATURE_WITH_ATTRIBUTES = FMProperty('Avg attributes per feature w. attributes', 'Average number of attributes in features with attributes.', FEATURE_ATTRIBUTES)
-    TYPED_FEATURES = FMProperty('Typed features', 'Non-Boolean features its selection require to provide a value (e.g., a number, a string,...', FEATURES)
-    NUMERICAL_FEATURES = FMProperty('Numerical features', 'Features with a Integer or Real type.', TYPED_FEATURES)
-    INTEGER_FEATURES = FMProperty('Integer features', 'Features with a Integer type.', NUMERICAL_FEATURES)
-    REAL_FEATURES = FMProperty('Real features', 'Features with a Real type.', NUMERICAL_FEATURES)
-    STRING_FEATURES = FMProperty('String features', 'Features with a String type.', TYPED_FEATURES)
-    MULTI_FEATURES = FMProperty('Multi-features', "Features with cardinalities (aka 'clonable features')", FEATURES)
+    #TYPED_FEATURES = FMProperty('Typed features', 'Non-Boolean features its selection require to provide a value (e.g., a number, a string,...', FEATURES)
+    #NUMERICAL_FEATURES = FMProperty('Numerical features', 'Features with a Integer or Real type.', TYPED_FEATURES)
+    #INTEGER_FEATURES = FMProperty('Integer features', 'Features with a Integer type.', NUMERICAL_FEATURES)
+    #REAL_FEATURES = FMProperty('Real features', 'Features with a Real type.', NUMERICAL_FEATURES)
+    #STRING_FEATURES = FMProperty('String features', 'Features with a String type.', TYPED_FEATURES)
+    #MULTI_FEATURES = FMProperty('Multi-features', "Features with cardinalities (aka 'clonable features')", FEATURES)
 
     CROSS_TREE_CONSTRAINTS = FMProperty('Cross-tree constraints', 'Textual cross-tree constraints.', None)
     LOGICAL_CONSTRAINTS = FMProperty('Logical constraints', 'Constraints with only logical operators.', CROSS_TREE_CONSTRAINTS)
-    ARITHMETIC_CONSTRAINTS = FMProperty('Arithmetic constraints', 'Constraints with at least one arithmetic operator.', CROSS_TREE_CONSTRAINTS)
-    AGGREGATION_CONSTRAINTS = FMProperty('Aggregation constraints', 'Constraints with at least one aggregation operator.', CROSS_TREE_CONSTRAINTS)
+    #ARITHMETIC_CONSTRAINTS = FMProperty('Arithmetic constraints', 'Constraints with at least one arithmetic operator.', CROSS_TREE_CONSTRAINTS)
+    #AGGREGATION_CONSTRAINTS = FMProperty('Aggregation constraints', 'Constraints with at least one aggregation operator.', CROSS_TREE_CONSTRAINTS)
     SINGLE_FEATURE_CONSTRAINTS = FMProperty('Single feature constraints', 'Constraints with a single feature or negated feature.', LOGICAL_CONSTRAINTS)
     SIMPLE_CONSTRAINTS = FMProperty('Simple constraints', 'Requires and Excludes constraints.', LOGICAL_CONSTRAINTS)  # Requires and excludes
     REQUIRES_CONSTRAINTS = FMProperty('Requires constraints', 'Constraints modeling that the activation of a feature f1 implies the activation of a feature f2.', SIMPLE_CONSTRAINTS)
@@ -146,7 +146,7 @@ class FMProperties(Enum):
     PD_MEDIAN = FMProperty('Median', 'Median number of features in configurations.', PRODUCT_DISTRIBUTION)
     PD_MAD = FMProperty('Median absolute deviation', 'Median absolute deviation number of features in configurations.', PRODUCT_DISTRIBUTION)
     
-    # ATOMIC_SETS = FMProperty('Atomic sets', '', None)  # Atomic sets need to be fixed in FLAMA.
+    ATOMIC_SETS = FMProperty('Atomic sets', '', None)  # Atomic sets need to be fixed in FLAMA.
 
 
 def safe_value(value: Any) -> str:
