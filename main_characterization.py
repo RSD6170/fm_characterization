@@ -52,9 +52,10 @@ def main(fm_filepath: str, metadata: dict[str, Any]) -> None:
     characterization.metadata.reference = metadata.get('doi')
     characterization.metadata.domains = metadata.get('domain')
     
-    print(characterization)
-    output_filepath = str(dir / f'{filename}.json')
-    characterization.to_json_file(output_filepath)
+    #print(characterization)
+    #output_filepath = str(dir / f'{filename}.json')
+    print("###---###")
+    print(characterization.export())
     
 
 if __name__ == '__main__':
