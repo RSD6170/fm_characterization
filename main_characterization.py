@@ -33,7 +33,7 @@ def read_fm_file(filename: str) -> Optional[FeatureModel]:
 
 
 
-def main(fm_filepath: str, metadata: dict[str, Any]) -> None:
+def main(fm_filepath: str, expensive : bool) -> None:
     path = pathlib.Path(fm_filepath)
     filename = path.stem
     dir = path.parent
@@ -43,15 +43,8 @@ def main(fm_filepath: str, metadata: dict[str, Any]) -> None:
     if fm is None:
         raise Exception('Feature model format not supported.')
     
-    characterization = FMCharacterization(fm)
-    characterization.metadata.name = filename if metadata.get('name') is None else metadata.get('name')
-    characterization.metadata.description = metadata.get('description')
-    characterization.metadata.author = metadata.get('authors')
-    characterization.metadata.year = metadata.get('year')
-    characterization.metadata.tags = metadata.get('tags')
-    characterization.metadata.reference = metadata.get('doi')
-    characterization.metadata.domains = metadata.get('domain')
-    
+    characterization = FMCharacterization(fm, not expensive)
+
     #print(characterization)
     #output_filepath = str(dir / f'{filename}.json')
     print("###---###")
@@ -64,22 +57,8 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser(description='FM Characterization.')
     parser.add_argument(metavar='path', dest='path', type=str, help='Input feature model.')
-    parser.add_argument('-name', dest='name', type=str, required=False, help="Feature model's name.")
-    parser.add_argument('-desc', dest='description', type=str, required=False, help="Feature model's description.")
-    parser.add_argument('-tags', dest='tags', type=str, required=False, help="Feature model's tags")
-    parser.add_argument('-authors', dest='authors', type=str, required=False, help="Feature model's authors")
-    parser.add_argument('-year', dest='year', type=int, required=False, help="Feature model's year")
-    parser.add_argument('-domain', dest='domain', type=str, required=False, help="Feature model's domain")
-    parser.add_argument('-doi', dest='doi', type=str, required=False, help="Feature model's doi")
+    parser.add_argument('--expensive', action="store_true", help='Include expensive computations')
+
     args = parser.parse_args()
 
-    metadata = {
-        'name': args.name,
-        'description': args.description,
-        'tags': args.tags,
-        'authors': args.authors,
-        'year': args.year,
-        'domain': args.domain,
-        'doi': args.doi
-    }
-    main(args.path, metadata)
+    main(args.path, args.expensive)
