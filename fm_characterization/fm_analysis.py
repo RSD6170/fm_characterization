@@ -92,7 +92,7 @@ class FMAnalysis():
             _valid = self._configurations > 0
         else:
             _valid = sat_operations.PySATSatisfiable().execute(self.sat_model).get_result()
-        _result = 'Yes' if _valid else 'No'
+        _result = str(_valid)
         return FMPropertyMeasure(FMProperties.VALID.value, _result)
 
     def fm_core_features(self) -> FMPropertyMeasure:
