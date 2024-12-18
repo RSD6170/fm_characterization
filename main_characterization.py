@@ -7,7 +7,7 @@ from typing import Optional, Any
 from flamapy.metamodels.fm_metamodel.models import FeatureModel
 from flamapy.metamodels.fm_metamodel.transformations import UVLReader, FeatureIDEReader
 
-from fm_characterization import FMCharacterization
+from fm_characterization import FMCharacterization, PartwiseCharacterization
 
 
 def read_fm_file(filename: str) -> Optional[FeatureModel]:
@@ -33,7 +33,7 @@ def read_fm_file(filename: str) -> Optional[FeatureModel]:
 
 
 
-def main(fm_filepath: str, expensive : bool) -> None:
+def main(fm_filepath: str, mode : str) -> None:
     path = pathlib.Path(fm_filepath)
     filename = path.stem
     dir = path.parent
@@ -43,7 +43,7 @@ def main(fm_filepath: str, expensive : bool) -> None:
     if fm is None:
         raise Exception('Feature model format not supported.')
     
-    characterization = FMCharacterization(fm, not expensive)
+    characterization = PartwiseCharacterization(fm, mode)
 
     #print(characterization)
     #output_filepath = str(dir / f'{filename}.json')
@@ -57,8 +57,8 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser(description='FM Characterization.')
     parser.add_argument(metavar='path', dest='path', type=str, help='Input feature model.')
-    parser.add_argument('--expensive', action="store_true", help='Include expensive computations')
+    parser.add_argument("--mode", help="Subset to analyze, defaults to all", choices=["all", "metrics", "analysis_full", "analysis_light"], default="all")
 
     args = parser.parse_args()
 
-    main(args.path, args.expensive)
+    main(args.path, args.mode)
