@@ -50,6 +50,9 @@ class FMAnalysis():
             self._fip = None
             self._descriptive_statistics = None
 
+    def isApproximation(self) -> bool:
+        return self._approximation
+
     def clean(self) -> None:
         if self.bdd_model is not None:
             logging.warning(f'BDD temp filepath: {self.bdd_model.bdd_file}')

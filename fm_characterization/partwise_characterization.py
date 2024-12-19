@@ -11,6 +11,7 @@ SPACE = ' '
 class PartwiseCharacterization:
 
     def __init__(self, model: FeatureModel, mode: str)-> None:
+        self.parting_symbol = " "
         self.mode = mode
         self.metadata = FMMetadata(model)
         match mode:
@@ -51,41 +52,46 @@ class PartwiseCharacterization:
             lines.append(f'{indentation}{name}: {value}{ratio}')
         return '\n'.join(lines)
 
+    def writeApprox(self, isApprox : bool) -> str:
+            return "ANALYSIS/isApprox/value" + self.parting_symbol + str(isApprox)
 
     def export(self) -> str:
         lines = []
         match self.mode:
             case 'all':
-                lines.extend(create_export_array(self.metrics.get_metrics(), "METRICS"))
-                lines.extend(create_export_array(self.analysis.get_analysis(), "ANALYSIS"))
+                lines.extend((self.create_export_array(self.metrics.get_metrics(), "METRICS")))
+                lines.extend((self.create_export_array(self.analysis.get_analysis(), "ANALYSIS")))
+                lines.append((self.writeApprox(self.analysis.isApproximation())))
             case 'metrics':
-                lines.extend(create_export_array(self.metrics.get_metrics(), "METRICS"))
+                lines.extend((self.create_export_array(self.metrics.get_metrics(), "METRICS")))
             case 'analysis_full':
-                lines.extend(create_export_array(self.analysis.get_analysis(), "ANALYSIS"))
+                lines.extend((self.create_export_array(self.analysis.get_analysis(), "ANALYSIS")))
+                lines.append((self.writeApprox(self.analysis.isApproximation())))
             case 'analysis_light':
-                lines.extend(create_export_array(self.analysis.get_analysis(), "ANALYSIS"))
+                lines.extend((self.create_export_array(self.analysis.get_analysis(), "ANALYSIS")))
+                lines.append((self.writeApprox(self.analysis.isApproximation())))
             case _:
                 raise ValueError('Unknown mode')
         return '\n'.join(lines)
 
 
-def create_export_array(measures: [FMPropertyMeasure], prefix: str) -> [str]:
-    parting_symbol = " "
-    lines = []
-    for property in measures:
-        parents = get_parents(property.property)
-        name = f"{prefix}"
-        for parent in parents:
-            name = f'{name}/{parent.name}'
-        name = f'{name}/{property.property.name}'
-        name = name.replace(" ", "_")
 
-        value = str(property.value) if property.size is None else str(property.size)
-        lines.append(f'{name + "/value"}{parting_symbol}{value}')
-        if property.ratio is not None:
-            ratio = property.ratio if property.ratio is not None else ''
-            lines.append(f'{name + "/ratio"}{parting_symbol}{ratio}')
-    return lines
+    def create_export_array(self, measures: [FMPropertyMeasure], prefix: str) -> [str]:
+        lines = []
+        for property in measures:
+            parents = get_parents(property.property)
+            name = f"{prefix}"
+            for parent in parents:
+                name = f'{name}/{parent.name}'
+            name = f'{name}/{property.property.name}'
+            name = name.replace(" ", "_")
+
+            value = str(property.value) if property.size is None else str(property.size)
+            lines.append(f'{name + "/value"}{self.parting_symbol}{value}')
+            if property.ratio is not None:
+                ratio = property.ratio if property.ratio is not None else ''
+                lines.append(f'{name + "/ratio"}{self.parting_symbol}{ratio}')
+        return lines
 
 
 def get_parents(property: FMProperty) -> list[FMProperty]:
