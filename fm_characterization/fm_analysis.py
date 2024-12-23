@@ -2,6 +2,7 @@ import math
 import pathlib
 import logging
 from typing import Any
+from decimal import Decimal
 
 from fm_characterization import FMProperties, FMPropertyMeasure
 from .fm_utils import get_ratio, get_nof_configuration_as_str, get_percentage_str
@@ -147,11 +148,11 @@ class FMAnalysis():
         return FMPropertyMeasure(FMProperties.CONFIGURATIONS.value, _configurations)
     
     def fm_total_variability(self) -> FMPropertyMeasure:
-        _total_variability = self._configurations / (2 ** len(self._features) - 1)
+        _total_variability = Decimal(self._configurations) / ( Decimal(2) ** Decimal(len(self._features)) - Decimal(1))
         return FMPropertyMeasure(FMProperties.TOTAL_VARIABILITY.value, _total_variability)
     
     def fm_partial_variability(self) -> FMPropertyMeasure:
-        _partial_variability = 0 if not self._variant_features else self._configurations / (2 ** len(self._variant_features) - 1)
+        _partial_variability = 0 if not self._variant_features else Decimal(self._configurations) / (Decimal(2) ** Decimal(len(self._variant_features)) - Decimal(1))
         return FMPropertyMeasure(FMProperties.PARTIAL_VARIABILITY.value, _partial_variability)
     
     def fm_homogeneity(self) -> FMPropertyMeasure:
@@ -162,19 +163,19 @@ class FMAnalysis():
         return FMPropertyMeasure(FMProperties.PRODUCT_DISTRIBUTION.value, None)
 
     def fm_mean_pd(self) -> FMPropertyMeasure:
-        _mean_pd = round(self._descriptive_statistics['Mean'], 2)
+        _mean_pd = round(self._descriptive_statistics['Mean'], 4)
         return FMPropertyMeasure(FMProperties.PD_MEAN.value, _mean_pd)
     
     def fm_std_pd(self) -> FMPropertyMeasure:
-        _std_pd = round(self._descriptive_statistics['Standard deviation'], 2)
+        _std_pd = round(self._descriptive_statistics['Standard deviation'], 4)
         return FMPropertyMeasure(FMProperties.PD_STD.value, _std_pd)
     
     def fm_median_pd(self) -> FMPropertyMeasure:
-        _median_pd = round(self._descriptive_statistics['Median'], 2)
+        _median_pd = round(self._descriptive_statistics['Median'], 4)
         return FMPropertyMeasure(FMProperties.PD_MEDIAN.value, _median_pd)
     
     def fm_mad_pd(self) -> FMPropertyMeasure:
-        _mad_pd = round(self._descriptive_statistics['Median absolute deviation'], 2)
+        _mad_pd = round(self._descriptive_statistics['Median absolute deviation'], 4)
         return FMPropertyMeasure(FMProperties.PD_MAD.value, _mad_pd)
     
     def fm_mode_pd(self) -> FMPropertyMeasure:
