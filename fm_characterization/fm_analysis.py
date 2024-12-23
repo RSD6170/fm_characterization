@@ -125,7 +125,7 @@ class FMAnalysis():
                                  get_ratio(_unique_features, self._features))
     
     def fm_pure_optional_features(self) -> FMPropertyMeasure:
-        _pure_optional_features = [feat for feat, prob, in self._fip.items() if prob == 0.5]
+        _pure_optional_features = [feat for feat, prob, in self._fip.items() if math.isclose(prob, 0.5)]
         return FMPropertyMeasure(FMProperties.PURE_OPTIONAL_FEATURES.value, 
                                  _pure_optional_features, 
                                  len(_pure_optional_features),
