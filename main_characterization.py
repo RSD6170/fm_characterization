@@ -26,9 +26,6 @@ def read_fm_file(filenameUVL: str, filenameXML : str) -> Optional[FeatureModel]:
 
 
 def main(path_UVL: str, path_XML: str, mode : str) -> None:
-    path = pathlib.Path(fm_filepath)
-    filename = path.stem
-    dir = path.parent
 
     # Read the feature model
     fm = read_fm_file(path_UVL, path_XML)
@@ -37,8 +34,6 @@ def main(path_UVL: str, path_XML: str, mode : str) -> None:
     
     characterization = PartwiseCharacterization(fm, mode)
 
-    #print(characterization)
-    #output_filepath = str(dir / f'{filename}.json')
     print("###---###")
     print(characterization.export())
     
