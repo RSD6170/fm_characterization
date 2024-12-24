@@ -12,12 +12,12 @@ from fm_characterization import FMCharacterization, PartwiseCharacterization
 
 def read_fm_file(filenameUVL: str, filenameXML : str) -> Optional[FeatureModel]:
     try:
-        return UVLReader(filenameUVL).transform()
+        return FeatureIDEReader(filenameXML).transform()
     except Exception as e:
         print(e)
         pass
     try:
-        return FeatureIDEReader(filenameXML).transform()
+        return UVLReader(filenameUVL).transform()
     except Exception as e:
         print(e)
         pass
