@@ -30,9 +30,11 @@ def main(path_UVL: str, path_XML: str, mode : str) -> None:
     # Read the feature model
     fm = read_fm_file(path_UVL, path_XML)
     if fm is None:
+        print("Error in FM Parsing.")
         raise Exception('Error in FM Parsing.')
     
     characterization = PartwiseCharacterization(fm, mode)
+    print("Computation successful!")
 
     print("###---###")
     print(characterization.export())
