@@ -16,11 +16,15 @@ def read_fm_file(filenameUVL: str, filenameXML : str) -> Optional[FeatureModel]:
     except Exception as e:
         print(e)
         print("Failed FeatureIDE XML parsing!")
+    except:
+        print("Failed FeatureIDE XML parsing with Error!")
     try:
         return UVLReader(filenameUVL).transform()
     except Exception as e:
         print(e)
         print("Failed UVL parsing!")
+    except:
+            print("Failed FeatureIDE XML parsing with Error!")
     return None
 
 
