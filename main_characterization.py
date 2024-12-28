@@ -2,6 +2,8 @@ import sys
 import pathlib
 import logging
 import argparse
+import resource
+import os
 from typing import Optional, Any
 
 from flamapy.metamodels.fm_metamodel.models import FeatureModel
@@ -30,6 +32,13 @@ def read_fm_file(filenameUVL: str, filenameXML : str) -> Optional[FeatureModel]:
 
 
 def main(path_UVL: str, path_XML: str, mode : str) -> None:
+
+    soft, hard = resource.getrlimit(resource.RLIMIT_AS)
+    print(f"Old mem limits: {soft / 1024 / 1024} MB soft, {hard / 1024 / 1024} MB hard")
+    if 'SLURM_MEM_PER_NODE' in os.environ:
+        maxMem = int( int(os.environ.get('SLURM_MEM_PER_NODE')) * 1024 * 1024 * 0.70 )
+        print(f"New mem limits: {maxMem / 1024 / 1024} MB soft, {hard / 1024 / 1024} MB hard")
+        resource.setrlimit(resource.RLIMIT_AS, (maxMem, hard))
 
     # Read the feature model
     fm = read_fm_file(path_UVL, path_XML)
